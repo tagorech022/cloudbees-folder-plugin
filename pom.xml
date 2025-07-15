@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-The MIT License
-
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jenkins-ci</groupId>
     <artifactId>jenkins</artifactId>
     <version>1.63</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.jenkins-ci.main</groupId>
   <artifactId>jenkins-test-harness</artifactId>
-  <version>${changelist}</version>
+  <version>999999-SNAPSHOT</version>
 
   <name>Test harness for Jenkins and plugins</name>
   <url>https://github.com/jenkinsci/jenkins-test-harness</url>
@@ -54,8 +33,7 @@ THE SOFTWARE.
     <hamcrest.version>2.2</hamcrest.version>
     <jmh.version>1.29</jmh.version>
     <java.level>8</java.level>
-    <concurrency>1</concurrency> <!-- may use e.g. 2C for 2 × (number of cores) -->
-    <!--TODO: fix FindBugs-->
+    <concurrency>1</concurrency>
     <findbugs.failOnError>false</findbugs.failOnError>
   </properties>
 
@@ -86,17 +64,13 @@ THE SOFTWARE.
       <artifactId>jenkins-war</artifactId>
       <version>2.204</version>
       <type>executable-war</type>
+      <optional>true</optional>
       <exclusions>
         <exclusion>
           <groupId>org.jenkins-ci.modules</groupId>
           <artifactId>sshd</artifactId>
         </exclusion>
       </exclusions>
-      <!--
-        To ensure consistent set of core artifacts are used, force the users to declare
-        a dependency to war
-      -->
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -108,14 +82,14 @@ THE SOFTWARE.
       <artifactId>jetty-security</artifactId>
       <version>${jetty.version}</version>
     </dependency>
-     <dependency>
-       <groupId>org.eclipse.jetty.websocket</groupId>
-       <artifactId>websocket-api</artifactId>
-       <version>${jetty.version}</version>
-     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty.websocket</groupId>
-      <artifactId>websocket-server</artifactId> <!-- or javax-websocket-server-impl -->
+      <artifactId>websocket-api</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.websocket</groupId>
+      <artifactId>websocket-server</artifactId>
       <version>${jetty.version}</version>
     </dependency>
     <dependency>
@@ -196,6 +170,7 @@ THE SOFTWARE.
       <version>${jmh.version}</version>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -206,7 +181,6 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
-        <!-- version specified in grandparent pom -->
         <extensions>true</extensions>
       </plugin>
       <plugin>
@@ -216,12 +190,6 @@ THE SOFTWARE.
           <rules>
             <requireUpperBoundDeps>
               <excludes combine.children="append">
-                <!--
-                  Stapler requests Guava 14.0 and Jenkins core requests Guice 4.0 which requests
-                  Guava 16.0.1. Core actually provides 11.0.1. Work around this mess by just
-                  excluding Guava from the RequireUpperBoundDeps check. The long-term fix is
-                  tracked in JENKINS-36779.
-                -->
                 <exclude>com.google.guava:guava</exclude>
               </excludes>
             </requireUpperBoundDeps>
@@ -231,21 +199,21 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <!-- version specified in grandparent pom -->
         <configuration>
-          <!-- SUREFIRE-1588 workaround; too late for systemProperties: -->
           <argLine>-Dfile.encoding=UTF-8 -Xmx256m -Djava.awt.headless=true -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
           <systemPropertyVariables>
-              <!-- use AntClassLoader that supports predictable file handle release -->
-              <hudson.ClassicPluginStrategy.useAntClassLoader>true</hudson.ClassicPluginStrategy.useAntClassLoader>
-              <hudson.maven.debug>${mavenDebug}</hudson.maven.debug>
-              <buildDirectory>${project.build.directory}</buildDirectory>
+            <hudson.ClassicPluginStrategy.useAntClassLoader>true</hudson.ClassicPluginStrategy.useAntClassLoader>
+            <hudson.maven.debug>${mavenDebug}</hudson.maven.debug>
+            <buildDirectory>${project.build.directory}</buildDirectory>
           </systemPropertyVariables>
           <reuseForks>false</reuseForks>
           <forkCount>${concurrency}</forkCount>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
+
+      <!-- DISABLED: gmavenplus-plugin due to missing script -->
+      <!--
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
@@ -272,21 +240,22 @@ THE SOFTWARE.
           </dependency>
         </dependencies>
       </plugin>
+      -->
     </plugins>
   </build>
 
   <profiles>
     <profile>
-        <id>skip-tests-on-release</id>
-        <activation>
-          <property>
-            <name>performRelease</name>
-            <value>true</value>
-          </property>
-        </activation>
-        <properties>
-          <skipTests>true</skipTests>
-        </properties>
+      <id>skip-tests-on-release</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
     </profile>
     <profile>
       <id>rerunFailingTests</id>
