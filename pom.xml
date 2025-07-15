@@ -5,17 +5,9 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jenkins-ci.plugins</groupId>
-  <artifactId>cloudbees-folder</artifactId>
-  <version>6.15-SNAPSHOT</version>
-  <packaging>hpi</packaging>
-
-  <name>CloudBees Folders Plugin</name>
-  <description>This plugin allows you to create folders to organize jobs in Jenkins.</description>
-  <url>https://github.com/jenkinsci/cloudbees-folder-plugin</url>
-
+  <!-- 🧠 Define plugin version first so it is resolved correctly -->
   <properties>
-    <plugin.parent.version>5.17</plugin.parent.version> <!-- ✅ Defined now -->
+    <plugin.parent.version>5.17</plugin.parent.version>
     <jenkins.version>2.414.1</jenkins.version>
     <java.level>17</java.level>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,12 +15,24 @@
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
+  <!-- ✅ Use plugin parent -->
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <version>${plugin.parent.version}</version>
   </parent>
 
+  <!-- Plugin coordinates -->
+  <groupId>org.jenkins-ci.plugins</groupId>
+  <artifactId>cloudbees-folder</artifactId>
+  <version>6.15-SNAPSHOT</version>
+  <packaging>hpi</packaging>
+
+  <name>CloudBees Folders Plugin</name>
+  <description>This plugin allows users to create folders to organize Jenkins jobs.</description>
+  <url>https://github.com/jenkinsci/cloudbees-folder-plugin</url>
+
+  <!-- Required Repositories -->
   <repositories>
     <repository>
       <id>jenkins-releases</id>
@@ -44,8 +48,9 @@
     </repository>
   </repositories>
 
+  <!-- Dependencies -->
   <dependencies>
-    <!-- Core Jenkins API -->
+    <!-- Core Jenkins APIs -->
     <dependency>
       <groupId>org.jenkins-ci.main</groupId>
       <artifactId>jenkins-core</artifactId>
@@ -67,16 +72,18 @@
     </dependency>
   </dependencies>
 
+  <!-- Optional: Add build plugins -->
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>17</source>
-          <target>17</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>
