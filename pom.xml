@@ -1,104 +1,117 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>in.mphasis</groupId>
-	<artifactId>DevOpsDemoProject</artifactId>
-	<packaging>war</packaging>
-	<version>17.0.4-SNAPSHOT</version>
-	<name>DevOps Demo Project</name>
-	<url>http://maven.apache.org</url>
-	
-	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.sonarsource.java</groupId>
-			<artifactId>sonar-jacoco-listeners</artifactId>
-		  <version>3.8</version>
-		  <scope>test</scope>
-		</dependency>
-	</dependencies>
-	<distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>Internal Releases</name>
-            <url>http://35.161.166.114:8081/nexus/content/repositories/releases/</url>
-			<uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>Internal Snapshot Releases</name>
-                     <url>http://35.161.166.114:8081/nexus/content/repositories/snapshots/</url>
-			<uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-	<build>
-		<finalName>myweb</finalName>
-		<plugins>
-		<plugin>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>				    
-		</plugin>
-		 <!-- for version update and code release required this plugin -->	
-		<plugin>
-		  <groupId>org.apache.maven.plugins</groupId>
-		  <artifactId>maven-release-plugin</artifactId>
-		  <version>2.5.2</version>
-		</plugin>
-		</plugins>
-	</build>
-	  <properties>
-            <project.scm.id>git</project.scm.id>
-         </properties>
-	  <scm>
-		<url>https://github.com/shankaradapa/client-demo-project</url>
-		<connection>scm:git:https://github.com/shankaradapa/client-demo-project</connection>
-		<developerConnection>scm:git:https://github.com/shankaradapa/client-demo-project</developerConnection>
-	    <tag>HEAD</tag>
-  </scm>
-	<profiles>
-	  <profile>
-      <id>coverage-per-test</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <!-- Minimal supported version is 2.4 -->
-            <version>2.13</version>
-            <configuration>
-              <properties>
-                <property>
-                  <name>listener</name>
-                  <value>org.sonar.java.jacoco.JUnitListener</value>
-                </property>
-              </properties>
-              <testFailureIgnore>true</testFailureIgnore>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
+    <modelVersion>4.0.0</modelVersion>
 
-      <dependencies>
+    <groupId>org.example</groupId>
+    <artifactId>code-quality-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <checkstyle.skip>false</checkstyle.skip>
+        <spotbugs.skip>false</spotbugs.skip>
+        <pmd.skip>false</pmd.skip>
+    </properties>
+
+    <dependencies>
+        <!-- JUnit for Testing -->
         <dependency>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>3.8</version>
-          <scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
         </dependency>
-      </dependencies>
-    </profile>	
-	</profiles>
-	
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire Plugin for Unit Tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+
+            <!-- Checkstyle Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${checkstyle.skip}</skip>
+                    <!-- Optional: provide your own config file -->
+                    <!-- <configLocation>${project.basedir}/checkstyle.xml</configLocation> -->
+                    <consoleOutput>true</consoleOutput>
+                    <failOnViolation>true</failOnViolation>
+                </configuration>
+            </plugin>
+
+            <!-- SpotBugs Plugin -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>spotbugs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${spotbugs.skip}</skip>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                </configuration>
+            </plugin>
+
+            <!-- PMD Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.21.0</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${pmd.skip}</skip>
+                    <!-- Optional: your own ruleset -->
+                    <!-- <rulesets> -->
+                    <!--     <ruleset>rulesets/java/basic.xml</ruleset> -->
+                    <!-- </rulesets> -->
+                    <failOnViolation>true</failOnViolation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
