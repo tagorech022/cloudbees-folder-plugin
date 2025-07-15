@@ -1,23 +1,27 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.54</version> <!-- Use a valid and resolvable version -->
-    <relativePath/> <!-- Do not use parent.relativePath to avoid wrong local POM reference -->
+    <version>4.54</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>cloudbees-folder</artifactId>
-  <version>6.15</version> <!-- Update to a released stable version -->
+  <version>6.15</version>
   <packaging>hpi</packaging>
 
   <name>CloudBees Folders Plugin</name>
-  <description>This plugin allows users to create "folders" to organize jobs. Users can define custom taxonomies (like by project type, organization type etc). Folders are nestable and you can define views within folders.</description>
+  <description>
+    This plugin allows users to create "folders" to organize jobs. Users can
+    define custom taxonomies (like by project type, organization type etc). Folders
+    are nestable and you can define views within folders.
+  </description>
   <url>https://wiki.jenkins.io/display/JENKINS/CloudBees+Folders+Plugin</url>
 
   <scm>
@@ -38,14 +42,27 @@
     <repository>
       <id>jenkins-releases</id>
       <url>https://repo.jenkins-ci.org/releases/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
     </repository>
+
     <repository>
-      <id>jenkins-snapshots</id>
-      <url>https://repo.jenkins-ci.org/snapshots/</url>
-      <releases><enabled>false</enabled></releases>
+      <id>jenkins-public</id>
+      <name>Jenkins Public Repository</name>
+      <url>https://repo.jenkins-ci.org/public/</url>
+      <releases><enabled>true</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jenkins-plugin-releases</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>
@@ -73,7 +90,7 @@
       <plugin>
         <groupId>org.jenkins-ci.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>4.3.0</version>
+        <version>3.16</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -86,4 +103,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
