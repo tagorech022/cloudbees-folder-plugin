@@ -1,27 +1,33 @@
-# Maven build files
+# Maven build artifacts
 target/
+build/
+dist/
 
-# Jenkins plugin development
+# Jenkins plugin build directories
 work/
 
-# IntelliJ project files
+# IntelliJ IDEA
 *.iml
+.idea/
 *.ipr
 *.iws
-.idea/
 
-# Eclipse project files
-.settings/
+# Eclipse
 .classpath
 .project
+.settings/
 .metadata
 .loadpath
 
-# NetBeans project files
+# NetBeans
 nbproject/private/
-build/
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+
+# OS / Tooling
+.DS_Store
+Thumbs.db
+
+# Logs and temporary fi
